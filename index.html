@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#ff4f9a"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="단비 BTC"/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<link rel="icon" href="icon.svg" type="image/svg+xml"/>
+<title>DANBI BTC AUTO SIGNAL 25X</title>
+<style>
+:root{
+ --bg:#06101c;--card:#0d1a2a;--card2:#11243a;--line:#203a55;--text:#f5f7fb;--muted:#92a6bd;
+ --green:#28e59b;--red:#ff5975;--yellow:#ffd166;--blue:#66b6ff;--white:#ffffff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#05101d,#081729 58%,#05101d);color:var(--text);
+ font-family:Inter,system-ui,-apple-system,"Noto Sans KR","Malgun Gothic",sans-serif;min-height:100vh}
+.wrap{max-width:700px;margin:auto;padding:16px 13px 70px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.brand{font-weight:950;font-size:20px;letter-spacing:.2px}
+.conn{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.dot{width:9px;height:9px;border-radius:50%;background:#687789}
+.dot.on{background:var(--green);box-shadow:0 0 12px var(--green)}
+.card{background:rgba(13,26,42,.95);border:1px solid var(--line);border-radius:22px;padding:16px;margin:11px 0;box-shadow:0 10px 32px #0003}
+.hero{text-align:center;padding:22px 14px}
+.small{font-size:12px;color:var(--muted);line-height:1.5}
+.price{font-size:38px;font-weight:950;font-variant-numeric:tabular-nums;margin:5px 0}
+.action{font-size:44px;font-weight:1000;line-height:1.05;margin:16px 0 10px;letter-spacing:-1px}
+.wait{color:#c9d4df}.long{color:var(--green)}.short{color:var(--red)}.tp{color:var(--yellow)}.sl{color:var(--red)}
+.sub{font-size:15px;color:#c8d5e1;line-height:1.55;min-height:48px}
+.badgeRow{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.badge{border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:12px;color:#c9d5e0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px}
+.label{font-size:12px;color:var(--muted);margin-bottom:6px}
+.value{font-size:20px;font-weight:900;font-variant-numeric:tabular-nums}
+.posbox{border:1px solid #2d4a66;background:#0a1726;border-radius:18px;padding:14px}
+.posheadline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.posname{font-size:21px;font-weight:950}
+.roi{font-size:31px;font-weight:1000;font-variant-numeric:tabular-nums}
+.bar{height:10px;background:#09131f;border-radius:999px;overflow:hidden;margin-top:12px;border:1px solid #22394f}
+.fill{height:100%;width:50%;background:linear-gradient(90deg,#ff5975,#ffd166,#28e59b);transition:width .25s ease}
+.tfrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tf{background:#0a1726;border:1px solid var(--line);border-radius:15px;text-align:center;padding:10px 4px}
+.tf b{display:block;color:var(--muted);font-size:12px;margin-bottom:5px}.tf span{font-weight:900}
+.up{color:var(--green)}.down{color:var(--red)}.flat{color:#c6d1dc}
+.log{max-height:220px;overflow:auto}
+.logitem{padding:9px 0;border-bottom:1px solid #1d3248;font-size:13px;color:#c9d6e2}
+.btn{width:100%;border:1px solid #2d5276;background:#0e2a45;color:#83c8ff;border-radius:14px;padding:13px;font-weight:900;font-size:15px}
+.alert{border-color:#6c5b2b;background:#19180e}
+.flash{animation:flash .7s ease 3}@keyframes flash{50%{filter:brightness(1.8)}}
+@media(max-width:520px){.action{font-size:39px}.price{font-size:33px}.roi{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">DANBI BTC AUTO SIGNAL</div>
+    <div class="conn"><span id="dot" class="dot"></span><span id="connText">연결 중</span></div>
+  </div>
+
+  <section class="card hero" id="hero">
+    <div class="small">BYBIT BTCUSDT PERPETUAL · 실시간 · 25X 기준</div>
+    <div class="price" id="price">--</div>
+    <div class="action wait" id="action">WAIT</div>
+    <div class="sub" id="message">시세와 지표를 불러오는 중입니다.</div>
+    <div class="badgeRow">
+      <span class="badge">익절 +8%</span>
+      <span class="badge">손절 -4%</span>
+      <span class="badge">1m 진입 · 5m/15m 필터</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="posheadline">
+      <div>
+        <div class="small">자동 추적 포지션</div>
+        <div class="posname" id="posName">없음</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">25X 예상 ROI</div>
+        <div class="roi" id="roi">--</div>
+      </div>
+    </div>
+    <div class="grid" style="margin-top:12px">
+      <div class="metric"><div class="label">자동 진입가</div><div class="value" id="entry">--</div></div>
+      <div class="metric"><div class="label">현재가</div><div class="value" id="cur">--</div></div>
+    </div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="small" id="positionNote" style="margin-top:9px">신규 진입 신호가 발생하면 해당 가격을 자동 저장합니다.</div>
+  </section>
+
+  <section class="card">
+    <div class="small" style="margin-bottom:8px">추세 확인</div>
+    <div class="tfrow">
+      <div class="tf"><b>1분</b><span id="t1" class="flat">--</span></div>
+      <div class="tf"><b>5분</b><span id="t5" class="flat">--</span></div>
+      <div class="tf"><b>15분</b><span id="t15" class="flat">--</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="grid">
+      <div class="metric"><div class="label">MACD 1m</div><div class="value" id="macd">--</div></div>
+      <div class="metric"><div class="label">RSI 14 · 1m</div><div class="value" id="rsi">--</div></div>
+      <div class="metric"><div class="label">EMA20 · 1m</div><div class="value" id="ema">--</div></div>
+      <div class="metric"><div class="label">거래량 / 20봉</div><div class="value" id="vol">--</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <button class="btn" id="notifyBtn" onclick="enableAlerts()">🔔 소리/진동 알림 켜기</button>
+    <div class="small" style="margin-top:9px">브라우저가 허용하는 경우 LONG/SHORT/매도 신호 발생 시 알림음과 진동을 사용합니다.</div>
+  </section>
+
+  <section class="card">
+    <div style="font-weight:900;margin-bottom:7px">시그널 기록</div>
+    <div class="log" id="log"><div class="logitem">프로그램 시작</div></div>
+  </section>
+
+  <section class="card alert small">
+    <b>중요</b><br>
+    이 프로그램은 주문을 실행하지 않고 신호만 제공합니다. 공개 Bybit 시장 데이터를 사용하며 API Key가 필요 없습니다.
+    수수료·슬리피지·펀딩비는 ROI 계산에 포함되지 않습니다. 25배 레버리지는 작은 가격 변동에도 손익이 크게 움직일 수 있습니다.
+  </section>
+</div>
+
+<script>
+const RESTS=["https://api.bybit.com","https://api.bytick.com"];
+const WS="wss://stream.bybit.com/v5/public/linear";
+let restIdx=0, lastPrice=null, lastTickerAt=0;
+let virtualPos=null; // {side,entry,startedCandle}
+let lastAction="WAIT", lastLoggedSignal="", cooldownUntilCandle=0;
+let alertEnabled=false, audioCtx=null, ws=null, reconnectTimer=null;
+let latestAnalysis=null;
+
+const $=id=>document.getElementById(id);
+const fmt=n=>n==null||!isFinite(n)?"--":Number(n).toLocaleString("en-US",{maximumFractionDigits:2});
+
+function logEvent(t){
+  const d=document.createElement("div"); d.className="logitem";
+  d.textContent=new Date().toLocaleTimeString("ko-KR",{hour12:false})+"  "+t;
+  $("log").prepend(d);
+}
+function beep(kind="signal"){
+  if(!alertEnabled) return;
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value=kind==="exit"?880:kind==="short"?360:660;
+    g.gain.setValueAtTime(.12,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.5);
+    o.start(); o.stop(audioCtx.currentTime+.5);
+  }catch(e){}
+  try{navigator.vibrate && navigator.vibrate(kind==="exit"?[250,120,250]:[180,90,180])}catch(e){}
+}
+function enableAlerts(){
+  alertEnabled=true;
+  $("notifyBtn").textContent="🔔 소리/진동 알림 ON";
+  beep("signal");
+}
+function ema(arr,p){
+  if(arr.length<p)return [];
+  const k=2/(p+1),out=new Array(arr.length).fill(null);
+  let s=arr.slice(0,p).reduce((a,b)=>a+b,0)/p;out[p-1]=s;
+  for(let i=p;i<arr.length;i++){s=arr[i]*k+s*(1-k);out[i]=s}
+  return out;
+}
+function macdCalc(c){
+  const e12=ema(c,12),e26=ema(c,26);
+  const line=c.map((_,i)=>e12[i]!=null&&e26[i]!=null?e12[i]-e26[i]:null);
+  const valid=line.filter(v=>v!=null),sv=ema(valid,9),sig=new Array(c.length).fill(null);
+  const start=line.findIndex(v=>v!=null);
+  sv.forEach((v,j)=>{if(v!=null)sig[start+j]=v});
+  const hist=line.map((v,i)=>v!=null&&sig[i]!=null?v-sig[i]:null);
+  return{line,sig,hist};
+}
+function rsiCalc(c,p=14){
+  if(c.length<=p)return null;
+  let g=0,l=0;
+  for(let i=1;i<=p;i++){const d=c[i]-c[i-1];if(d>=0)g+=d;else l-=d}
+  let ag=g/p,al=l/p,r=al===0?100:100-100/(1+ag/al);
+  for(let i=p+1;i<c.length;i++){const d=c[i]-c[i-1];ag=(ag*(p-1)+Math.max(d,0))/p;al=(al*(p-1)+Math.max(-d,0))/p;r=al===0?100:100-100/(1+ag/al)}
+  return r;
+}
+async function fetchKline(interval,limit=220){
+  let err;
+  for(let a=0;a<RESTS.length;a++){
+    const idx=(restIdx+a)%RESTS.length;
+    try{
+      const u=`${RESTS[idx]}/v5/market/kline?category=linear&symbol=BTCUSDT&interval=${interval}&limit=${limit}`;
+      const r=await fetch(u,{cache:"no-store"}); if(!r.ok)throw Error("HTTP "+r.status);
+      const j=await r.json(); if(j.retCode!==0)throw Error(j.retMsg||"API error");
+      restIdx=idx;
+      return j.result.list.slice().reverse().map(x=>({t:+x[0],o:+x[1],h:+x[2],l:+x[3],c:+x[4],v:+x[5]}));
+    }catch(e){err=e}
+  }
+  throw err||Error("REST 연결 실패");
+}
+function analyze(k){
+  const arr=k.slice(0,-1), c=arr.map(x=>x.c), v=arr.map(x=>x.v);
+  const m=macdCalc(c),e20=ema(c,20),r=rsiCalc(c);
+  const i=c.length-1,p=i-1;
+  const hist=m.hist[i],prevHist=m.hist[p];
+  const above=c[i]>e20[i],below=c[i]<e20[i],slope=e20[i]-e20[Math.max(0,i-3)];
+  const volAvg=v.slice(-21,-1).reduce((a,b)=>a+b,0)/20, volRatio=volAvg?v[i]/volAvg:1;
+  const crossUp=m.line[p]<=m.sig[p] && m.line[i]>m.sig[i];
+  const crossDn=m.line[p]>=m.sig[p] && m.line[i]<m.sig[i];
+  const momentumUp=m.line[i]>m.sig[i] && hist>prevHist;
+  const momentumDn=m.line[i]<m.sig[i] && hist<prevHist;
+  let trend="FLAT";
+  if(above&&slope>0&&hist>0)trend="UP";
+  if(below&&slope<0&&hist<0)trend="DOWN";
+  return {c:c[i],t:arr[i].t,macd:m.line[i],sig:m.sig[i],hist,prevHist,e20:e20[i],rsi:r,volRatio,above,below,trend,crossUp,crossDn,momentumUp,momentumDn};
+}
+function setTF(id,t){
+  const e=$(id);e.textContent=t==="UP"?"상승":t==="DOWN"?"하락":"중립";e.className=t==="UP"?"up":t==="DOWN"?"down":"flat";
+}
+function decide(a1,a5,a15){
+  const longPts=[
+    a1.crossUp||a1.momentumUp,
+    a1.above,
+    a5.trend==="UP",
+    a15.trend==="UP",
+    a1.rsi>=46&&a1.rsi<=68,
+    a1.volRatio>=0.85
+  ].filter(Boolean).length;
+  const shortPts=[
+    a1.crossDn||a1.momentumDn,
+    a1.below,
+    a5.trend==="DOWN",
+    a15.trend==="DOWN",
+    a1.rsi>=32&&a1.rsi<=54,
+    a1.volRatio>=0.85
+  ].filter(Boolean).length;
+
+  const longCore=(a1.crossUp||a1.momentumUp)&&a1.above&&a5.trend==="UP"&&a15.trend==="UP";
+  const shortCore=(a1.crossDn||a1.momentumDn)&&a1.below&&a5.trend==="DOWN"&&a15.trend==="DOWN";
+
+  if(longCore&&longPts>=5)return{action:"LONG",why:`1분 상승 모멘텀 + EMA20 위 + 5분/15분 상승 일치 · RSI ${a1.rsi.toFixed(1)} · 거래량 ${a1.volRatio.toFixed(2)}x`};
+  if(shortCore&&shortPts>=5)return{action:"SHORT",why:`1분 하락 모멘텀 + EMA20 아래 + 5분/15분 하락 일치 · RSI ${a1.rsi.toFixed(1)} · 거래량 ${a1.volRatio.toFixed(2)}x`};
+  return{action:"WAIT",why:`조건 불충분 · LONG ${longPts}/6 · SHORT ${shortPts}/6 — 진입하지 않음`};
+}
+function roi(){
+  if(!virtualPos||!lastPrice)return null;
+  const move=virtualPos.side==="LONG"?(lastPrice/virtualPos.entry-1):(virtualPos.entry/lastPrice-1);
+  return move*25*100;
+}
+function setAction(action,msg){
+  const el=$("action"),hero=$("hero");
+  let txt=action,cls="wait";
+  if(action==="LONG"){txt="🟢 LONG 진입";cls="long"}
+  else if(action==="SHORT"){txt="🔴 SHORT 진입";cls="short"}
+  else if(action==="TP"){txt="💰 지금 익절 매도";cls="tp"}
+  else if(action==="SL"){txt="🚨 지금 손절 매도";cls="sl"}
+  else {txt="⚪ WAIT";cls="wait"}
+  el.textContent=txt;el.className="action "+cls;$("message").textContent=msg;
+  if(action!==lastAction){hero.classList.remove("flash");void hero.offsetWidth;hero.classList.add("flash");lastAction=action}
+}
+function renderPos(){
+  $("cur").textContent=lastPrice?"$"+fmt(lastPrice):"--";
+  if(!virtualPos){$("posName").textContent="없음";$("entry").textContent="--";$("roi").textContent="--";$("fill").style.width="50%";return}
+  $("posName").textContent=virtualPos.side;
+  $("posName").style.color=virtualPos.side==="LONG"?"var(--green)":"var(--red)";
+  $("entry").textContent="$"+fmt(virtualPos.entry);
+  const r=roi();
+  $("roi").textContent=(r>=0?"+":"")+r.toFixed(2)+"%";
+  $("roi").style.color=r>=0?"var(--green)":"var(--red)";
+  const pct=Math.max(0,Math.min(100,50+(r/16)*50));$("fill").style.width=pct+"%";
+}
+function maybeExit(){
+  if(!virtualPos)return false;
+  const r=roi();
+  if(r>=8){
+    setAction("TP",`${virtualPos.side} 자동 추적 ROI ${r.toFixed(2)}% · +8% 목표 도달 → 전량 익절 매도 시그널`);
+    if(lastLoggedSignal!=="TP-"+virtualPos.startedCandle){logEvent(`💰 익절 매도 · ${virtualPos.side} · ROI ${r.toFixed(2)}%`);lastLoggedSignal="TP-"+virtualPos.startedCandle;beep("exit")}
+    return true;
+  }
+  if(r<=-4){
+    setAction("SL",`${virtualPos.side} 자동 추적 ROI ${r.toFixed(2)}% · -4% 손절선 도달 → 전량 손절 매도 시그널`);
+    if(lastLoggedSignal!=="SL-"+virtualPos.startedCandle){logEvent(`🚨 손절 매도 · ${virtualPos.side} · ROI ${r.toFixed(2)}%`);lastLoggedSignal="SL-"+virtualPos.startedCandle;beep("exit")}
+    return true;
+  }
+  return false;
+}
+function connectWS(){
+  try{
+    ws=new WebSocket(WS);
+    ws.onopen=()=>{
+      $("dot").className="dot on";$("connText").textContent="LIVE";
+      ws.send(JSON.stringify({op:"subscribe",args:["tickers.BTCUSDT"]}));
+    };
+    ws.onmessage=e=>{
+      try{
+        const j=JSON.parse(e.data);
+        if(j.topic==="tickers.BTCUSDT"&&j.data&&j.data.lastPrice){
+          lastPrice=+j.data.lastPrice;lastTickerAt=Date.now();
+          $("price").textContent="$"+fmt(lastPrice);
+          renderPos();
+          maybeExit();
+        }
+      }catch(_){}
+    };
+    ws.onerror=()=>{$("connText").textContent="재연결 중"};
+    ws.onclose=()=>{ $("dot").className="dot";$("connText").textContent="재연결 중"; clearTimeout(reconnectTimer);reconnectTimer=setTimeout(connectWS,2500)};
+  }catch(e){setTimeout(connectWS,2500)}
+}
+async function refreshIndicators(){
+  try{
+    const [k1,k5,k15]=await Promise.all([fetchKline("1"),fetchKline("5"),fetchKline("15")]);
+    if(!lastPrice)lastPrice=k1[k1.length-1].c;
+    const a1=analyze(k1),a5=analyze(k5),a15=analyze(k15);latestAnalysis={a1,a5,a15};
+    $("macd").textContent=(a1.macd>=0?"+":"")+a1.macd.toFixed(2);
+    $("rsi").textContent=a1.rsi.toFixed(1);
+    $("ema").textContent="$"+fmt(a1.e20);
+    $("vol").textContent=a1.volRatio.toFixed(2)+"x";
+    setTF("t1",a1.trend);setTF("t5",a5.trend);setTF("t15",a15.trend);
+
+    if(!maybeExit()){
+      const d=decide(a1,a5,a15);
+      if(!virtualPos){
+        setAction(d.action,d.why);
+        const key=a1.t+"-"+d.action;
+        if((d.action==="LONG"||d.action==="SHORT") && a1.t>cooldownUntilCandle && lastLoggedSignal!==key){
+          virtualPos={side:d.action,entry:lastPrice||a1.c,startedCandle:a1.t};
+          logEvent(`${d.action==="LONG"?"🟢":"🔴"} ${d.action} 진입 시그널 · $${fmt(virtualPos.entry)}`);
+          lastLoggedSignal=key;beep(d.action==="SHORT"?"short":"signal");
+          renderPos();
+        }
+      }else{
+        const r=roi();
+        setAction("WAIT",`${virtualPos.side} 포지션 추적 중 · 현재 예상 ROI ${(r>=0?"+":"")+r.toFixed(2)}% · +8% 익절 / -4% 손절 대기`);
+      }
+    }
+
+    // EXIT 신호가 발생했으면 다음 확정 1분봉 전까지 포지션을 자동 정리하고 재진입 금지
+    if(virtualPos){
+      const r=roi();
+      if(r>=8 || r<=-4){
+        cooldownUntilCandle=a1.t+60000;
+        setTimeout(()=>{virtualPos=null;renderPos();},1200);
+      }
+    }
+  }catch(e){
+    $("dot").className="dot";$("connText").textContent="시세 확인 중";
+    if(!virtualPos)setAction("WAIT","바이비트 지표 데이터 연결을 재시도하고 있습니다.");
+  }
+}
+connectWS();
+refreshIndicators();
+setInterval(refreshIndicators,10000);
+setInterval(()=>{
+  if(Date.now()-lastTickerAt>15000 && (!ws||ws.readyState!==1)){try{ws&&ws.close()}catch(e){} connectWS()}
+},5000);
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>
