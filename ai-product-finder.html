@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DANBI AI 상품찾기</title>
 
 <style>
@@ -16,87 +16,116 @@ body{
 .wrap{
   max-width:720px;
   margin:auto;
-  padding:20px;
-}
-.logo{
-  text-align:center;
-  font-size:14px;
-  font-weight:800;
-  color:#ff3f91;
-  margin-top:10px;
+  padding:25px 18px 50px;
 }
 h1{
-  text-align:center;
-  margin:8px 0 4px;
   font-size:30px;
+  margin:5px 0 8px;
 }
 .sub{
-  text-align:center;
-  color:#777;
-  margin-bottom:24px;
-  line-height:1.5;
+  color:#666;
+  line-height:1.6;
+  margin-bottom:22px;
 }
 .card{
   background:white;
+  border:1px solid #f2dce7;
   border-radius:22px;
   padding:20px;
   margin-bottom:16px;
-  box-shadow:0 5px 25px rgba(255,70,145,.10);
+  box-shadow:0 5px 18px rgba(255,80,150,.06);
 }
-label{
-  font-weight:800;
-  display:block;
-  margin-bottom:8px;
+h2{
+  margin:0 0 16px;
+  font-size:21px;
+}
+.categories{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.cat{
+  border:1px solid #f0d4e1;
+  background:#fff;
+  border-radius:15px;
+  padding:15px 8px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+}
+.cat.active{
+  background:#fff0f6;
+  border:2px solid #ff3f91;
+  color:#d81b68;
 }
 input{
   width:100%;
-  padding:15px;
+  padding:16px;
   border:1px solid #ddd;
-  border-radius:13px;
-  font-size:16px;
-  margin-bottom:10px;
+  border-radius:14px;
+  font-size:17px;
+  margin-top:12px;
 }
 .mainbtn{
   width:100%;
-  padding:16px;
   border:0;
-  border-radius:14px;
+  border-radius:16px;
+  padding:17px;
+  margin-top:12px;
   background:#ff3f91;
   color:white;
-  font-size:17px;
+  font-size:18px;
   font-weight:800;
   cursor:pointer;
 }
-.mallgrid{
+.result{
+  display:none;
+  background:#fff0f6;
+  border-radius:18px;
+  padding:18px;
+  margin-top:17px;
+  line-height:1.7;
+}
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+.chip{
+  background:white;
+  border:1px solid #efcbdc;
+  border-radius:30px;
+  padding:9px 12px;
+  cursor:pointer;
+}
+.malls{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
   margin-top:15px;
 }
 .mall{
-  border:1px solid #ffd4e3;
-  border-radius:13px;
-  padding:13px 8px;
+  border:1px solid #f0d4e1;
   background:white;
-  font-weight:700;
+  border-radius:15px;
+  padding:14px 5px;
+  font-weight:800;
   cursor:pointer;
+}
+.back{
+  display:block;
   text-align:center;
-}
-.mall:hover{
-  background:#fff0f5;
-}
-.result{
-  margin-top:18px;
-  padding:16px;
-  border-radius:14px;
-  background:#fff3f7;
-  display:none;
-  line-height:1.7;
+  margin-top:22px;
+  text-decoration:none;
+  color:#777;
+  font-weight:700;
 }
 .small{
-  font-size:13px;
   color:#777;
-  margin-top:10px;
+  font-size:14px;
+  margin-top:14px;
+  line-height:1.5;
 }
 </style>
 </head>
@@ -105,112 +134,236 @@ input{
 
 <div class="wrap">
 
-  <h1>🤖 DANBI AI 상품찾기</h1>
-  <p>팔고 싶은 상품을 입력하면 여러 쇼핑몰에서 바로 찾아볼 수 있어요.</p>
+<h1>🤖 AI 상품찾기</h1>
+<div class="sub">
+팔고 싶은 상품군을 고르면 소싱하기 좋은 상품 아이디어를 빠르게 찾아드려요.
+</div>
 
-  <input
-    id="product"
-    type="text"
-    placeholder="예: 사과 5kg, 화장지 30롤, 여성 운동화"
-  >
+<div class="card">
+<h2>① 상품군 선택</h2>
 
-  <button class="mainbtn" onclick="findProduct()">
-    AI 상품 찾기
-  </button>
+<div class="categories">
+<button class="cat" onclick="pick('과일·농산물',this)">🍎 과일·농산물</button>
+<button class="cat" onclick="pick('식품·간식',this)">🥐 식품·간식</button>
+<button class="cat" onclick="pick('생활용품',this)">🏠 생활용품</button>
+<button class="cat" onclick="pick('주방용품',this)">🍳 주방용품</button>
+<button class="cat" onclick="pick('뷰티·화장품',this)">💄 뷰티·화장품</button>
+<button class="cat" onclick="pick('건강용품',this)">💪 건강용품</button>
+<button class="cat" onclick="pick('패션·잡화',this)">👜 패션·잡화</button>
+<button class="cat" onclick="pick('반려동물',this)">🐶 반려동물</button>
+</div>
+</div>
 
-  <div id="result" class="result"></div>
+<div class="card">
+<h2>② AI에게 상품 찾기</h2>
 
-  <div class="mallgrid">
+<input id="keyword"
+placeholder="예: 명절선물, 40대 여성, 자취생">
 
-    <button class="mall" onclick="openMall('coupang')">
-      쿠팡 검색
-    </button>
+<button class="mainbtn" onclick="findProducts()">
+✨ AI 상품 후보 찾기
+</button>
 
-    <button class="mall" onclick="openMall('gmarket')">
-      G마켓 검색
-    </button>
+<div id="result" class="result"></div>
+</div>
 
-    <button class="mall" onclick="openMall('auction')">
-      옥션 검색
-    </button>
+<div class="card">
+<h2>③ 같은 상품 가격 비교</h2>
 
-    <button class="mall" onclick="openMall('11st')">
-      11번가 검색
-    </button>
+<input id="search"
+placeholder="비교할 상품명을 입력하세요">
 
-    <button class="mall" onclick="openMall('naver')">
-      네이버쇼핑
-    </button>
+<div class="malls">
+<button class="mall" onclick="mall('coupang')">쿠팡</button>
+<button class="mall" onclick="mall('gmarket')">G마켓</button>
+<button class="mall" onclick="mall('auction')">옥션</button>
+<button class="mall" onclick="mall('11st')">11번가</button>
+<button class="mall" onclick="mall('naver')">네이버쇼핑</button>
+</div>
 
-  </div>
+<div class="small">
+상품 후보를 누르면 자동으로 비교 검색창에 들어갑니다.
+여러 쇼핑몰의 가격을 비교한 뒤 마진픽에서 수익을 계산하세요.
+</div>
+</div>
 
-  <div class="small">
-    같은 상품을 여러 쇼핑몰에서 비교해 더 저렴한 소싱처를 찾아보세요.
-  </div>
+<a class="back" href="index.html">
+← DANBI MARGINPICK으로 돌아가기
+</a>
 
 </div>
 
 <script>
-function getProduct(){
-  return document.getElementById("product").value.trim();
+
+let category="";
+
+const ideas={
+"과일·농산물":[
+"사과 선물세트",
+"샤인머스켓",
+"곶감 선물세트",
+"제주 감귤",
+"고구마 5kg"
+],
+
+"식품·간식":[
+"견과류 선물세트",
+"약과 세트",
+"한과 선물세트",
+"프로틴 간식",
+"수제 쿠키세트"
+],
+
+"생활용품":[
+"호텔수건 세트",
+"대용량 물티슈",
+"세탁세제 세트",
+"욕실 청소용품",
+"수납 정리함"
+],
+
+"주방용품":[
+"밀폐용기 세트",
+"프라이팬 세트",
+"텀블러",
+"주방 수납선반",
+"실리콘 조리도구"
+],
+
+"뷰티·화장품":[
+"멀티밤",
+"마스크팩 세트",
+"선크림",
+"보습크림",
+"클렌징 세트"
+],
+
+"건강용품":[
+"마사지볼",
+"찜질팩",
+"손목 보호대",
+"목 스트레칭기",
+"건강 선물세트"
+],
+
+"패션·잡화":[
+"여성 운동화",
+"여성 크로스백",
+"여름 모자",
+"파우치 세트",
+"기능성 양말"
+],
+
+"반려동물":[
+"강아지 간식",
+"고양이 모래",
+"반려동물 방석",
+"강아지 배변패드",
+"반려동물 장난감"
+]
+};
+
+function pick(name,btn){
+
+category=name;
+
+document.querySelectorAll(".cat")
+.forEach(x=>x.classList.remove("active"));
+
+btn.classList.add("active");
+
 }
 
-function findProduct(){
-  const product = getProduct();
+function findProducts(){
 
-  if(!product){
-    alert("찾을 상품명을 입력해주세요.");
-    return;
-  }
-
-  const result = document.getElementById("result");
-
-  result.style.display = "block";
-  result.innerHTML =
-    "<strong>🔎 AI 소싱 검색 준비 완료</strong><br>" +
-    "상품: <b>" + escapeHtml(product) + "</b><br>" +
-    "아래 쇼핑몰 버튼을 눌러 같은 상품의 판매가격을 비교하세요.";
+if(!category){
+alert("먼저 상품군을 선택해주세요.");
+return;
 }
 
-function openMall(mall){
-  const product = getProduct();
+let extra=document.getElementById("keyword").value.trim();
 
-  if(!product){
-    alert("먼저 상품명을 입력해주세요.");
-    return;
-  }
+let list=ideas[category];
 
-  const q = encodeURIComponent(product);
-  let url = "";
+let html=
+"<b>🔎 AI 소싱 후보</b><br>"+
+"<b>"+category+"</b>";
 
-  if(mall === "coupang"){
-    url = "https://www.coupang.com/np/search?q=" + q;
-  }
-
-  if(mall === "gmarket"){
-    url = "https://browse.gmarket.co.kr/search?keyword=" + q;
-  }
-
-  if(mall === "auction"){
-    url = "https://browse.auction.co.kr/search?keyword=" + q;
-  }
-
-  if(mall === "11st"){
-    url = "https://search.11st.co.kr/Search.tmall?kwd=" + q;
-  }
-
-  if(mall === "naver"){
-    url = "https://search.shopping.naver.com/search/all?query=" + q;
-  }
-
-  window.open(url, "_blank");
+if(extra){
+html+=" · "+safe(extra);
 }
 
-function escapeHtml(text){
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
+html+=
+"<br><br>아래 상품 중 하나를 눌러 가격 비교를 시작하세요."+
+"<div class='chips'>";
+
+list.forEach(function(item){
+
+html+=
+"<button class='chip' onclick='selectProduct(\""+
+item.replace(/"/g,"&quot;")+
+"\")'>"+item+"</button>";
+
+});
+
+html+="</div>";
+
+let r=document.getElementById("result");
+
+r.innerHTML=html;
+r.style.display="block";
+
 }
+
+function selectProduct(name){
+
+document.getElementById("search").value=name;
+
+document.getElementById("search")
+.scrollIntoView({behavior:"smooth",block:"center"});
+
+}
+
+function mall(type){
+
+let q=document.getElementById("search").value.trim();
+
+if(!q){
+alert("비교할 상품명을 먼저 입력해주세요.");
+return;
+}
+
+let e=encodeURIComponent(q);
+let url="";
+
+if(type==="coupang")
+url="https://www.coupang.com/np/search?q="+e;
+
+if(type==="gmarket")
+url="https://browse.gmarket.co.kr/search?keyword="+e;
+
+if(type==="auction")
+url="https://browse.auction.co.kr/search?keyword="+e;
+
+if(type==="11st")
+url="https://search.11st.co.kr/Search.tmall?kwd="+e;
+
+if(type==="naver")
+url="https://search.shopping.naver.com/search/all?query="+e;
+
+window.open(url,"_blank");
+
+}
+
+function safe(text){
+
+let d=document.createElement("div");
+d.textContent=text;
+
+return d.innerHTML;
+
+}
+
 </script>
 
 </body>
