@@ -96,8 +96,31 @@ input{
   background:white;
   border:1px solid #efcbdc;
   border-radius:30px;
-  padding:9px 12px;
+  padding:10px 13px;
   cursor:pointer;
+  font-size:14px;
+}
+.chip:hover{
+  background:#ffe4ef;
+}
+.aiinfo{
+  background:white;
+  border:1px solid #f2dce7;
+  border-radius:14px;
+  padding:13px;
+  margin:12px 0;
+  font-size:14px;
+  line-height:1.6;
+}
+.tag{
+  display:inline-block;
+  background:#ffdeea;
+  color:#c91c5b;
+  border-radius:20px;
+  padding:5px 9px;
+  margin:3px;
+  font-size:12px;
+  font-weight:800;
 }
 .malls{
   display:grid;
@@ -135,56 +158,114 @@ input{
 <div class="wrap">
 
 <h1>🤖 AI 상품찾기</h1>
+
 <div class="sub">
-팔고 싶은 상품군을 고르면 소싱하기 좋은 상품 아이디어를 빠르게 찾아드려요.
+뭘 팔지 모르겠다면 상품군과 판매 대상을 선택하세요.<br>
+조건에 맞는 <b>소싱 상품 후보</b>를 먼저 찾아드려요.
 </div>
 
 <div class="card">
+
 <h2>① 상품군 선택</h2>
 
 <div class="categories">
-<button class="cat" onclick="pick('과일·농산물',this)">🍎 과일·농산물</button>
-<button class="cat" onclick="pick('식품·간식',this)">🥐 식품·간식</button>
-<button class="cat" onclick="pick('생활용품',this)">🏠 생활용품</button>
-<button class="cat" onclick="pick('주방용품',this)">🍳 주방용품</button>
-<button class="cat" onclick="pick('뷰티·화장품',this)">💄 뷰티·화장품</button>
-<button class="cat" onclick="pick('건강용품',this)">💪 건강용품</button>
-<button class="cat" onclick="pick('패션·잡화',this)">👜 패션·잡화</button>
-<button class="cat" onclick="pick('반려동물',this)">🐶 반려동물</button>
+
+<button class="cat" onclick="pick('과일·농산물',this)">
+🍎 과일·농산물
+</button>
+
+<button class="cat" onclick="pick('식품·간식',this)">
+🥐 식품·간식
+</button>
+
+<button class="cat" onclick="pick('생활용품',this)">
+🏠 생활용품
+</button>
+
+<button class="cat" onclick="pick('주방용품',this)">
+🍳 주방용품
+</button>
+
+<button class="cat" onclick="pick('뷰티·화장품',this)">
+💄 뷰티·화장품
+</button>
+
+<button class="cat" onclick="pick('건강용품',this)">
+💪 건강용품
+</button>
+
+<button class="cat" onclick="pick('패션·잡화',this)">
+👜 패션·잡화
+</button>
+
+<button class="cat" onclick="pick('반려동물',this)">
+🐶 반려동물
+</button>
+
 </div>
 </div>
+
 
 <div class="card">
+
 <h2>② AI에게 상품 찾기</h2>
 
-<input id="keyword"
-placeholder="예: 명절선물, 40대 여성, 자취생">
+<div class="small">
+누구에게, 어떤 목적으로 팔고 싶은지 적어보세요.
+</div>
+
+<input
+ id="keyword"
+ placeholder="예: 40대 여성 / 명절선물 / 자취생 / 가성비 / 재구매"
+>
 
 <button class="mainbtn" onclick="findProducts()">
 ✨ AI 상품 후보 찾기
 </button>
 
 <div id="result" class="result"></div>
+
 </div>
 
+
 <div class="card">
+
 <h2>③ 같은 상품 가격 비교</h2>
 
-<input id="search"
-placeholder="비교할 상품명을 입력하세요">
+<input
+ id="search"
+ placeholder="추천 상품을 누르면 자동으로 입력됩니다"
+>
 
 <div class="malls">
-<button class="mall" onclick="mall('coupang')">쿠팡</button>
-<button class="mall" onclick="mall('gmarket')">G마켓</button>
-<button class="mall" onclick="mall('auction')">옥션</button>
-<button class="mall" onclick="mall('11st')">11번가</button>
-<button class="mall" onclick="mall('naver')">네이버쇼핑</button>
+
+<button class="mall" onclick="mall('coupang')">
+쿠팡
+</button>
+
+<button class="mall" onclick="mall('gmarket')">
+G마켓
+</button>
+
+<button class="mall" onclick="mall('auction')">
+옥션
+</button>
+
+<button class="mall" onclick="mall('11st')">
+11번가
+</button>
+
+<button class="mall" onclick="mall('naver')">
+네이버쇼핑
+</button>
+
 </div>
 
 <div class="small">
-상품 후보를 누르면 자동으로 비교 검색창에 들어갑니다.
-여러 쇼핑몰의 가격을 비교한 뒤 마진픽에서 수익을 계산하세요.
+추천 상품을 선택한 뒤 여러 쇼핑몰에서 같은 규격의 가격을 비교하세요.
+가격 확인 후 기존 DANBI MARGINPICK에서 예상 마진을 계산하면 됩니다.
 </div>
+
 </div>
 
 <a class="back" href="index.html">
@@ -193,171 +274,580 @@ placeholder="비교할 상품명을 입력하세요">
 
 </div>
 
+
 <script>
 
 let category="";
 
-const ideas={
-"과일·농산물":[
-"사과 선물세트",
-"샤인머스켓",
-"곶감 선물세트",
-"제주 감귤",
-"고구마 5kg"
-],
 
-"식품·간식":[
-"견과류 선물세트",
-"약과 세트",
-"한과 선물세트",
-"프로틴 간식",
-"수제 쿠키세트"
-],
+const productDB={
 
-"생활용품":[
-"호텔수건 세트",
+"과일·농산물":{
+default:[
+"가정용 사과 5kg",
+"샤인머스켓 2kg",
+"제주 감귤 5kg",
+"꿀고구마 5kg",
+"대추방울토마토 2kg",
+"반건시 곶감세트",
+"배 선물세트 5kg",
+"제주 황금향 3kg"
+],
+gift:[
+"프리미엄 사과 선물세트",
+"나주 배 선물세트",
+"샤인머스켓 선물세트",
+"반건시 곶감 선물세트",
+"사과·배 혼합 선물세트",
+"제주 황금향 선물세트",
+"한라봉 선물세트"
+],
+single:[
+"소포장 세척사과",
+"컵과일 혼합세트",
+"냉동 블루베리",
+"미니 고구마 2kg",
+"방울토마토 1kg",
+"소포장 바나나"
+],
+value:[
+"못난이 사과 5kg",
+"가정용 배 5kg",
+"못난이 감자 5kg",
+"꿀고구마 대용량",
+"가정용 제주 감귤",
+"대용량 양파 5kg"
+]
+},
+
+"식품·간식":{
+default:[
+"하루견과 30봉",
+"약과 선물세트",
+"누룽지 대용량",
+"김 선물세트",
+"프로틴 간식세트",
+"미숫가루",
+"수제 쿠키세트",
+"한과 세트"
+],
+gift:[
+"프리미엄 견과 선물세트",
+"전통 한과 선물세트",
+"약과 선물세트",
+"김 선물세트",
+"차·다과 선물세트",
+"건어물 선물세트"
+],
+single:[
+"소포장 하루견과",
+"컵 누룽지",
+"개별포장 약과",
+"프로틴바 묶음",
+"소포장 김",
+"간편 아침식사 세트"
+],
+value:[
+"대용량 누룽지",
+"대용량 견과류",
+"김 대용량 묶음",
+"간식 박스",
+"대용량 미숫가루",
+"과자 묶음세트"
+]
+},
+
+"생활용품":{
+default:[
+"호텔수건 10장 세트",
 "대용량 물티슈",
 "세탁세제 세트",
-"욕실 청소용품",
+"주방 수세미 대용량",
+"논슬립 옷걸이 20개",
+"의류 압축팩 세트",
+"욕실 청소용품 세트",
 "수납 정리함"
 ],
+gift:[
+"호텔수건 선물세트",
+"생활용품 종합세트",
+"프리미엄 타월세트",
+"욕실용품 선물세트",
+"디퓨저 생활세트"
+],
+single:[
+"미니 빨래건조대",
+"원룸 수납함",
+"압축팩 세트",
+"멀티탭 정리함",
+"소형 휴지통",
+"옷걸이 세트"
+],
+value:[
+"대용량 물티슈",
+"화장지 30롤",
+"세탁세제 대용량",
+"주방타올 대용량",
+"수세미 대용량",
+"쓰레기봉투 묶음"
+]
+},
 
-"주방용품":[
+"주방용품":{
+default:[
 "밀폐용기 세트",
-"프라이팬 세트",
-"텀블러",
+"실리콘 조리도구 세트",
+"에어프라이어 종이호일",
+"니트릴 위생장갑 100매",
+"텀블러 세척솔 세트",
+"항균 도마 세트",
 "주방 수납선반",
+"프라이팬 세트"
+],
+gift:[
+"프라이팬 선물세트",
+"밀폐용기 선물세트",
+"주방 조리도구 세트",
+"텀블러 선물세트",
+"도마·칼 세트"
+],
+single:[
+"1인용 프라이팬",
+"소형 밀폐용기",
+"전자레인지 용기세트",
+"미니 도마",
+"싱크대 정리선반",
 "실리콘 조리도구"
 ],
+value:[
+"밀폐용기 대용량 세트",
+"위생장갑 200매",
+"종이호일 대용량",
+"수세미 묶음세트",
+"주방행주 대용량",
+"다용도 지퍼백"
+]
+},
 
-"뷰티·화장품":[
+"뷰티·화장품":{
+default:[
 "멀티밤",
-"마스크팩 세트",
-"선크림",
+"마스크팩 20매",
 "보습크림",
-"클렌징 세트"
+"선크림",
+"클렌징 세트",
+"핸드크림 세트",
+"바디로션",
+"립밤 세트"
 ],
+gift:[
+"기초화장품 선물세트",
+"핸드크림 선물세트",
+"보습크림 세트",
+"마스크팩 선물세트",
+"바디케어 선물세트"
+],
+women:[
+"보습 탄력크림",
+"멀티밤",
+"톤업 선크림",
+"아이크림",
+"마스크팩 세트",
+"핸드크림 세트"
+],
+value:[
+"마스크팩 대용량",
+"선크림 2개 세트",
+"클렌징 대용량",
+"바디로션 대용량",
+"핸드크림 묶음",
+"립밤 세트"
+]
+},
 
-"건강용품":[
+"건강용품":{
+default:[
 "마사지볼",
-"찜질팩",
+"온열 찜질팩",
 "손목 보호대",
+"무릎 보호대",
 "목 스트레칭기",
-"건강 선물세트"
+"폼롤러",
+"발 마사지용품",
+"허리 쿠션"
 ],
+gift:[
+"온열 찜질기 선물세트",
+"마사지용품 세트",
+"건강 생활용품 세트",
+"목·어깨 마사지용품",
+"발 건강용품 세트"
+],
+women:[
+"손목 보호대",
+"온열 찜질팩",
+"목 스트레칭기",
+"허리 쿠션",
+"마사지볼 세트",
+"종아리 마사지용품"
+],
+value:[
+"마사지볼 세트",
+"보호대 2개 세트",
+"폼롤러",
+"찜질팩 세트",
+"스트레칭 밴드세트",
+"자세교정 쿠션"
+]
+},
 
-"패션·잡화":[
-"여성 운동화",
+"패션·잡화":{
+default:[
 "여성 크로스백",
-"여름 모자",
+"기능성 양말 세트",
+"여성 운동화",
 "파우치 세트",
+"여성 모자",
+"에코백",
+"여성 지갑",
+"스카프"
+],
+gift:[
+"여성 지갑 선물세트",
+"스카프 선물세트",
+"파우치 세트",
+"여성 가방",
+"양말 선물세트"
+],
+women:[
+"여성 크로스백",
+"여성 경량 운동화",
+"자외선 차단 모자",
+"여성 파우치",
+"스카프",
 "기능성 양말"
 ],
-
-"반려동물":[
-"강아지 간식",
-"고양이 모래",
-"반려동물 방석",
-"강아지 배변패드",
-"반려동물 장난감"
+value:[
+"양말 10켤레 세트",
+"파우치 3종 세트",
+"에코백",
+"데일리 크로스백",
+"기본 모자",
+"여성 카드지갑"
 ]
+},
+
+"반려동물":{
+default:[
+"강아지 배변패드 100매",
+"고양이 벤토나이트 모래",
+"강아지 간식 대용량",
+"반려동물 물티슈",
+"노즈워크 장난감",
+"반려동물 방석",
+"배변봉투 리필",
+"실리콘 식기매트"
+],
+gift:[
+"반려동물 간식 선물세트",
+"강아지 장난감 세트",
+"반려동물 생활용품 세트",
+"고양이 장난감 세트",
+"펫케어 선물세트"
+],
+single:[
+"소포장 강아지 간식",
+"고양이 모래 소포장",
+"미니 노즈워크",
+"휴대용 물병",
+"배변봉투",
+"반려동물 물티슈"
+],
+value:[
+"배변패드 대용량",
+"고양이 모래 대용량",
+"강아지 간식 대용량",
+"배변봉투 대용량",
+"물티슈 묶음세트",
+"장난감 묶음세트"
+]
+}
+
 };
+
 
 function pick(name,btn){
 
 category=name;
 
 document.querySelectorAll(".cat")
-.forEach(x=>x.classList.remove("active"));
+.forEach(function(x){
+x.classList.remove("active");
+});
 
 btn.classList.add("active");
 
 }
 
+
+function getIntent(text){
+
+text=(text || "").toLowerCase();
+
+if(
+text.includes("명절") ||
+text.includes("선물") ||
+text.includes("부모님") ||
+text.includes("추석") ||
+text.includes("설날")
+){
+return "gift";
+}
+
+if(
+text.includes("자취") ||
+text.includes("1인") ||
+text.includes("혼자") ||
+text.includes("소포장")
+){
+return "single";
+}
+
+if(
+text.includes("40대") ||
+text.includes("50대") ||
+text.includes("60대") ||
+text.includes("여성") ||
+text.includes("엄마")
+){
+return "women";
+}
+
+if(
+text.includes("가성비") ||
+text.includes("저렴") ||
+text.includes("싼") ||
+text.includes("대용량") ||
+text.includes("마진")
+){
+return "value";
+}
+
+return "default";
+
+}
+
+
+function getIntentName(intent){
+
+if(intent==="gift") return "선물·명절형";
+if(intent==="single") return "1인·자취형";
+if(intent==="women") return "여성 타깃형";
+if(intent==="value") return "가성비·마진형";
+
+return "기본 인기형";
+
+}
+
+
+function getProducts(category,intent){
+
+let data=productDB[category];
+
+if(!data){
+return [];
+}
+
+let list=data[intent];
+
+if(!list){
+list=data.default;
+}
+
+let combined=[].concat(list || []);
+
+if(intent!=="default" && data.default){
+combined=combined.concat(data.default);
+}
+
+let unique=[];
+
+combined.forEach(function(item){
+
+if(!unique.includes(item)){
+unique.push(item);
+}
+
+});
+
+return unique.slice(0,8);
+
+}
+
+
 function findProducts(){
 
 if(!category){
+
 alert("먼저 상품군을 선택해주세요.");
+
 return;
+
 }
 
-let extra=document.getElementById("keyword").value.trim();
+let extra=
+document.getElementById("keyword").value.trim();
 
-let list=ideas[category];
+let intent=getIntent(extra);
+
+let list=getProducts(category,intent);
+
+if(list.length===0){
+
+alert("추천 상품을 찾지 못했습니다.");
+
+return;
+
+}
 
 let html=
-"<b>🔎 AI 소싱 후보</b><br>"+
-"<b>"+category+"</b>";
+"<b>✨ AI 소싱 추천</b><br>"+
+"<b>"+safe(category)+"</b>";
 
 if(extra){
+
 html+=" · "+safe(extra);
+
 }
 
 html+=
-"<br><br>아래 상품 중 하나를 눌러 가격 비교를 시작하세요."+
+"<div class='aiinfo'>"+
+"<span class='tag'>"+getIntentName(intent)+"</span>"+
+"<br>현재 입력 조건을 기준으로 비교하기 좋은 상품 후보를 골랐어요."+
+"<br><b>상품을 누르면 아래 가격비교 검색창에 자동 입력됩니다.</b>"+
+"</div>"+
 "<div class='chips'>";
+
 
 list.forEach(function(item){
 
 html+=
-"<button class='chip' onclick='selectProduct(\""+
-item.replace(/"/g,"&quot;")+
-"\")'>"+item+"</button>";
+"<button class='chip' type='button' data-product='"+
+safe(item)+
+"'>"+
+safe(item)+
+"</button>";
 
 });
 
+
 html+="</div>";
 
-let r=document.getElementById("result");
 
-r.innerHTML=html;
-r.style.display="block";
+let result=
+document.getElementById("result");
+
+result.innerHTML=html;
+
+result.style.display="block";
+
+
+result.querySelectorAll(".chip")
+.forEach(function(button){
+
+button.addEventListener("click",function(){
+
+selectProduct(
+this.getAttribute("data-product")
+);
+
+});
+
+});
 
 }
+
 
 function selectProduct(name){
 
 document.getElementById("search").value=name;
 
 document.getElementById("search")
-.scrollIntoView({behavior:"smooth",block:"center"});
+.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
 
 }
+
 
 function mall(type){
 
-let q=document.getElementById("search").value.trim();
+let q=
+document.getElementById("search").value.trim();
 
 if(!q){
+
 alert("비교할 상품명을 먼저 입력해주세요.");
+
 return;
+
 }
 
 let e=encodeURIComponent(q);
+
 let url="";
 
-if(type==="coupang")
-url="https://www.coupang.com/np/search?q="+e;
 
-if(type==="gmarket")
-url="https://browse.gmarket.co.kr/search?keyword="+e;
+if(type==="coupang"){
 
-if(type==="auction")
-url="https://browse.auction.co.kr/search?keyword="+e;
+url=
+"https://www.coupang.com/np/search?q="+e;
 
-if(type==="11st")
-url="https://search.11st.co.kr/Search.tmall?kwd="+e;
+}
 
-if(type==="naver")
-url="https://search.shopping.naver.com/search/all?query="+e;
+else if(type==="gmarket"){
+
+url=
+"https://browse.gmarket.co.kr/search?keyword="+e;
+
+}
+
+else if(type==="auction"){
+
+url=
+"https://browse.auction.co.kr/search?keyword="+e;
+
+}
+
+else if(type==="11st"){
+
+url=
+"https://search.11st.co.kr/Search.tmall?kwd="+e;
+
+}
+
+else if(type==="naver"){
+
+url=
+"https://search.shopping.naver.com/search/all?query="+e;
+
+}
+
+
+if(url){
 
 window.open(url,"_blank");
 
 }
 
+}
+
+
 function safe(text){
 
 let d=document.createElement("div");
+
 d.textContent=text;
 
 return d.innerHTML;
