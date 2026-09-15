@@ -1,0 +1,17 @@
+{
+  "name": "DANBI MARGINPICK",
+  "short_name": "MARGINPICK",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff7fb",
+  "theme_color": "#ff4e88",
+  "icons": [
+    {
+      "src": "/danbi-marginpick-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
