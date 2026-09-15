@@ -74,4 +74,144 @@ input{
   margin-top:15px;
 }
 .mall{
-  border:1
+  border:1px solid #ffd4e3;
+  border-radius:13px;
+  padding:13px 8px;
+  background:white;
+  font-weight:700;
+  cursor:pointer;
+  text-align:center;
+}
+.mall:hover{
+  background:#fff0f5;
+}
+.result{
+  margin-top:18px;
+  padding:16px;
+  border-radius:14px;
+  background:#fff3f7;
+  display:none;
+  line-height:1.7;
+}
+.small{
+  font-size:13px;
+  color:#777;
+  margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <h1>🤖 DANBI AI 상품찾기</h1>
+  <p>팔고 싶은 상품을 입력하면 여러 쇼핑몰에서 바로 찾아볼 수 있어요.</p>
+
+  <input
+    id="product"
+    type="text"
+    placeholder="예: 사과 5kg, 화장지 30롤, 여성 운동화"
+  >
+
+  <button class="mainbtn" onclick="findProduct()">
+    AI 상품 찾기
+  </button>
+
+  <div id="result" class="result"></div>
+
+  <div class="mallgrid">
+
+    <button class="mall" onclick="openMall('coupang')">
+      쿠팡 검색
+    </button>
+
+    <button class="mall" onclick="openMall('gmarket')">
+      G마켓 검색
+    </button>
+
+    <button class="mall" onclick="openMall('auction')">
+      옥션 검색
+    </button>
+
+    <button class="mall" onclick="openMall('11st')">
+      11번가 검색
+    </button>
+
+    <button class="mall" onclick="openMall('naver')">
+      네이버쇼핑
+    </button>
+
+  </div>
+
+  <div class="small">
+    같은 상품을 여러 쇼핑몰에서 비교해 더 저렴한 소싱처를 찾아보세요.
+  </div>
+
+</div>
+
+<script>
+function getProduct(){
+  return document.getElementById("product").value.trim();
+}
+
+function findProduct(){
+  const product = getProduct();
+
+  if(!product){
+    alert("찾을 상품명을 입력해주세요.");
+    return;
+  }
+
+  const result = document.getElementById("result");
+
+  result.style.display = "block";
+  result.innerHTML =
+    "<strong>🔎 AI 소싱 검색 준비 완료</strong><br>" +
+    "상품: <b>" + escapeHtml(product) + "</b><br>" +
+    "아래 쇼핑몰 버튼을 눌러 같은 상품의 판매가격을 비교하세요.";
+}
+
+function openMall(mall){
+  const product = getProduct();
+
+  if(!product){
+    alert("먼저 상품명을 입력해주세요.");
+    return;
+  }
+
+  const q = encodeURIComponent(product);
+  let url = "";
+
+  if(mall === "coupang"){
+    url = "https://www.coupang.com/np/search?q=" + q;
+  }
+
+  if(mall === "gmarket"){
+    url = "https://browse.gmarket.co.kr/search?keyword=" + q;
+  }
+
+  if(mall === "auction"){
+    url = "https://browse.auction.co.kr/search?keyword=" + q;
+  }
+
+  if(mall === "11st"){
+    url = "https://search.11st.co.kr/Search.tmall?kwd=" + q;
+  }
+
+  if(mall === "naver"){
+    url = "https://search.shopping.naver.com/search/all?query=" + q;
+  }
+
+  window.open(url, "_blank");
+}
+
+function escapeHtml(text){
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+</script>
+
+</body>
+</html>
